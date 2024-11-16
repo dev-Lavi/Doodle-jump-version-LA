@@ -11,8 +11,7 @@ body, html {
 }
 
 #board {
-    background-image: url(./doodlejumpbg.png);
-
+    background-image: url(doodlejumpbg.png);
     background-size: cover;
     width: 360px;
     height: 575px;
@@ -29,4 +28,120 @@ body, html {
     top: 40px;
     left: 50%;
     transform: translateX(-50%);
+}
+/* Home Screen Styles */
+.home-screen {
+    background-image: url(doodlejumpbg.png);
+    text-align: center;
+    background-color: #f3f3f3;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.doodle-icon {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+}
+.doodle-icon-right {
+    width: 70px;
+    height: 70px;
+    margin: 10px 350px 50px 10px;
+
+}
+.doodle-icon-left{
+    width: 70px;
+    height: 70px;
+    margin: 50px 10px 50px 350px;
+}
+
+.title {
+    font-family: 'Arial', sans-serif;
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.buttons button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.play-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.rules-button {
+    background-color: #2196F3;
+    color: white;
+}
+
+.exit-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.rules-container {
+    display: none;
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    width: 30%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.rules-container h2 {
+    margin-bottom: 10px;
+}
+
+.rules-container p {
+    margin: 5px 0;
+}
+
+.rules-container button {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px 20px;
+    background-color: #d37373;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+
+
+
+@media only screen and (max-width: 650px)
+{
+    .home-screen {
+        display: flex;
+        position: absolute;
+        margin: auto;
+    }
 }

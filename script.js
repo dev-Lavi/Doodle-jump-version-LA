@@ -31,7 +31,7 @@ let gameOver = false;
 //physics
 let velocityX = 0;
 let velocityY = 0; //doodler jump speed
-let initialVelocityY = -7; //starting velocity y
+let initialVelocityY = -8; //starting velocity y
 let gravity = 0.4;
 
 //platforms
@@ -112,7 +112,7 @@ context.clearRect(0, 0, board.width, board.height);
 
 
     // Check if clouds should be activated
-    if (score >= 3000 && !cloudsActivated) {
+    if (score >= 1000 && !cloudsActivated) {
         cloudsActivated = true; // Activate clouds
         placeClouds(); // Initialize cloud positions
     }
@@ -371,5 +371,29 @@ function updateClouds() {
     });
 }
 
+//go home
+function goHome() {
+    if (confirm("Are you sure you want to go back to the home screen?")) {
+        window.location.href = "home.html"; // Redirect to the home screen
+    }
+}
 
+//home buttons
+function startGame() {
+    window.location.href = "index.html"; // Redirects to the game page
+}
+
+function showRules() {
+    document.getElementById('rules').style.display = 'block';
+}
+
+function hideRules() {
+    document.getElementById('rules').style.display = 'none';
+}
+
+function exitGame() {
+    if (confirm("Are you sure you want to exit?")) {
+        window.close(); // Attempts to close the window
+    }
+}
 
