@@ -3,19 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arjit Jump - Home</title>
+    <title>Lavi - Home</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="home-screen">
+        <!-- UFO Image -->
+        <img src="ufo.png" alt="UFO" class="ufo-icon">
+
+        <!-- Bird Image -->
+        <img src="bird.png" alt="Bird" class="bird-icon">
+
+        <!-- Doodle Icon (Right) -->
         <img src="doodler-right.png" alt="Doodle Icon" class="doodle-icon-right">
-        <h1 class="title">Welcome to ARJIT-LAVI Jump!</h1>
+
+        <!-- Title -->
+        <h1 class="title">Welcome to Doodle Jump</h1>
+
+        <!-- Buttons -->
         <div class="buttons">
             <button class="play-button" onclick="startGame()">Play</button>
             <button class="rules-button" onclick="showRules()">Game Rules</button>
             <button class="exit-button" onclick="exitGame()">Exit</button>
         </div>
+
+        <!-- Rules Section -->
         <div id="rules" class="rules-container">
             <h2>Game Rules</h2>
             <p>1. Use arrow keys or A/D to move left and right.</p>
@@ -24,13 +37,18 @@
             <p>4. Have fun and aim for the highest score!</p>
             <button onclick="hideRules()">Close</button>
         </div>
+
+        <!-- Doodle Icon (Left) -->
         <img src="doodler-left.png" alt="Doodle Icon" class="doodle-icon-left">
+
+        <!-- Footer Section -->
         <div>
             <h2>Made By:</h2>
-            <p>Arjit & Lavi</p>
+            <p>Lavi</p>
         </div>
-                <img src="platform-broken.png" alt="Doodle Icon" class="platform-icon" style="margin-top: 10px;">
 
+        <!-- Platform Icon -->
+        <img src="platform-broken.png" alt="Platform Icon" class="platform-icon" style="margin-top: 10px;">
     </div>
 </body>
 </html>

@@ -13,7 +13,7 @@ let doodlerX = boardWidth/2 - doodlerWidth/2; //so here we are postioning the do
 let doodlerY = boardHeight*7/8 - doodlerHeight;
 let doodlerRightImg;
 let doodlerLeftImg;
-
+let gameOverMusic = new Audio("game-over.mp3"); // Path to game over sound
 
 let doodler = {
     img : null,
@@ -22,6 +22,14 @@ let doodler = {
     width : doodlerWidth, 
     height : doodlerHeight
 } 
+
+
+// Balls
+let balls = [];
+const ballWidth = 10;
+const ballHeight = 10;
+let ballColor = "red";
+const ballSpeed = 5;
 
 //score section
 let score = 0;
@@ -40,21 +48,22 @@ let platformWidth = 60;
 let platformHeight = 18;
 let platformImg;
 
-//clouds
+//clouds 
 let cloudsActivated = false; // Initially, clouds are deactivated
 let cloudArray = []; // Array to hold cloud objects
-const cloudWidth = 375;
-const cloudHeight = 185;
+const cloudWidth = 150;
+const cloudHeight = 150;
 let cloudImg = new Image();
 cloudImg.src = "cloud.png";
 
 // Bird
 let birdActivated = false; // Bird activation state
 let birdLastActivatedAt = 2000; // Score threshold for bird activation
-let birdWidth = 70;
-let birdHeight = 70;
+let birdWidth = 60;
+let birdHeight = 60;
 let birdImg = new Image();
 birdImg.src = "bird.png"; // Replace with the path to your bird image
+let birdMusic = new Audio("bird-music.mp3"); // Path to bird sound
 
 let bird = {
     img: birdImg,
@@ -62,7 +71,26 @@ let bird = {
     y: -birdHeight, // Starts above the canvas
     width: birdWidth,
     height: birdHeight,
-    velocityX: -2 // Horizontal speed of bird
+    velocityX: -1 // Horizontal speed of bird
+};
+
+// UFO properties
+let ufoActivated = false; // UFO activation state
+let ufoWidth = 100;
+let ufoHeight = 100;
+let ufoImg = new Image();
+ufoImg.src = "ufo.png"; // Path to your UFO image
+let ufoMusic = new Audio("ufo-music.mp3"); // Path to your UFO music file
+let lastUFOAppearance = 0; // Timestamp of the last UFO appearance
+const ufoCooldown = 10000; // Minimum time (in ms) between UFO appearances
+
+let ufo = {
+    img: ufoImg,
+    x: -ufoWidth, // Starts off-screen on the left
+    y: Math.random() * boardHeight / 2, // Random vertical position
+    width: ufoWidth,
+    height: ufoHeight,
+    velocityX: 3 // Speed of the UFO
 };
 
 window.onload = function() {
@@ -146,14 +174,21 @@ if (doodler.y > board.height) {
     gameOver = true;
 }
 
-    //bird
-    // Activate the bird based on score
-    if (score >= birdLastActivatedAt && !birdActivated) {
+// Bird activation
+if (!birdActivated && score >= birdLastActivatedAt) {
+    // Add randomization to bird activation
+    if (Math.random() < 0.6) { // 30% chance to activate the bird
         birdActivated = true; // Activate the bird
         bird.x = boardWidth; // Start bird from the right edge
         bird.y = -birdHeight; // Start above the canvas
+        birdMusic.play(); // Play bird sound
         console.log("Bird activated!");
     }
+
+    // Increase the next activation threshold to make bird appear less often
+    birdLastActivatedAt += 3000; // Increase the activation threshold (adjust value as needed)
+}
+
     
     // If the bird is active, update its movement and check for collisions
     if (birdActivated) {
@@ -164,6 +199,8 @@ if (doodler.y > board.height) {
         if (bird.x + bird.width < 0) {
             bird.x = boardWidth; // Reset to the right
             bird.y = -birdHeight; // Reset above the canvas
+            birdMusic.pause();
+            birdMusic.currentTime = 0;
         }
     
         // Move bird downward with the opposite velocity of the doodler
@@ -185,6 +222,9 @@ if (doodler.y > board.height) {
             gameOver = true;
         }
     }
+
+    activateUFO();
+    updateUFO();
 
 // drawing doodler again and again in loop
 
@@ -223,6 +263,10 @@ updateScore();
     context.fillText(score, 5, 20);
     if (gameOver) {
         context.fillText("Game over: Press 'space' to Restart", boardWidth/7, boardHeight*7/8);
+        gameOverMusic.play(); // Play game over music
+        ufoMusic.pause();
+        birdMusic.pause();
+        return;
     }
 }
 
@@ -237,6 +281,19 @@ function moveDoodler(e) {
         doodler.img = doodlerLeftImg;
     }
     else if (e.code == "Space" && gameOver) {
+       
+        gameOverMusic.pause();
+        gameOverMusic.currentTime = 0;
+    
+        ufoMusic.pause();
+        ufoMusic.currentTime = 0;
+    
+        birdMusic.pause();
+        birdMusic.currentTime = 0;
+    
+        ufoActivated = false;
+        birdActivated = false;
+
         //reset
         doodler = {
             img : doodlerRightImg,
@@ -259,12 +316,9 @@ function moveDoodler(e) {
         //reset clouds
         placeClouds();
         cloudsActivated = false;
+        
     }
 }
-
-
-
-
 
 
 function placePlatforms() {
@@ -338,9 +392,9 @@ function updateScore() {
 function placeClouds() {
     cloudArray = []; // Clear any existing clouds
 
-    for (let i = 0; i < 5; i++) { // Add 5 clouds
-        let randomX = Math.floor(Math.random() * (boardWidth - cloudWidth));
-        let randomY = Math.floor(Math.random() * -boardHeight); // Start above the canvas
+    for (let i = 0; i < 9; i++) { // Add 5 clouds
+        let randomX = Math.floor(Math.random() * (boardWidth - cloudWidth)); // Random horizontal position
+        let randomY = Math.floor(3*Math.random() * -boardHeight); // Start above the canvas
 
         let cloud = {
             img: cloudImg,
@@ -353,6 +407,7 @@ function placeClouds() {
         cloudArray.push(cloud);
     }
 }
+
 
 function updateClouds() {
     if (!cloudsActivated) return; // Skip if clouds are not yet activated
@@ -369,6 +424,44 @@ function updateClouds() {
         }
     }
     });
+}
+
+// Function to randomly activate UFO
+function activateUFO() {
+    const currentTime = Date.now();
+    const timeSinceLastUFO = currentTime - lastUFOAppearance;
+
+    // UFO appears only if not already active and cooldown has passed
+    if (!ufoActivated && timeSinceLastUFO > ufoCooldown && Math.random() < 0.1) { // 10% chance
+        ufoActivated = true;
+        lastUFOAppearance = currentTime;
+        ufo.x = -ufoWidth; // Start off-screen
+        ufo.y = Math.random() * boardHeight / 2; // Random vertical position
+        ufoMusic.play(); // Play UFO music
+    }
+}
+
+// Update UFO
+function updateUFO() {
+    if (!ufoActivated) return;
+
+    // Move the UFO
+    ufo.x += ufo.velocityX;
+
+    // If UFO goes off the screen, deactivate it and stop music
+    if (ufo.x > boardWidth) {
+        ufoActivated = false;
+        ufoMusic.pause();
+        ufoMusic.currentTime = 0; // Reset music
+    }
+
+    // Draw the UFO
+    context.drawImage(ufo.img, ufo.x, ufo.y, ufo.width, ufo.height);
+
+    // Check collision with the doodler
+    if (detectCollision(doodler, ufo)) {
+        gameOver = true;
+    }
 }
 
 //go home

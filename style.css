@@ -1,15 +1,20 @@
+/* Reset styles */
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body, html {
     height: 100%;
+    font-family: 'Arial', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #eaf7ff; /* Light background color */
 }
 
+/* Game Board */
 #board {
     background-image: url(doodlejumpbg.png);
     background-size: cover;
@@ -18,10 +23,12 @@ body, html {
     border: 2px solid black;
     display: block;
     margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* Game Title */
 #gameTitle {
-    font-family: 'Arial', sans-serif;
     font-size: 24px;
     color: #333;
     position: absolute;
@@ -29,49 +36,79 @@ body, html {
     left: 50%;
     transform: translateX(-50%);
 }
+
 /* Home Screen Styles */
 .home-screen {
     background-image: url(doodlejumpbg.png);
+    background-size: cover;
     text-align: center;
-    background-color: #f3f3f3;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
+/* Doodle Icons */
 .doodle-icon {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 20px;
+    width: 80px;
+    height: 80px;
 }
+
 .doodle-icon-right {
-    width: 70px;
-    height: 70px;
-    margin: 10px 350px 50px 10px;
-
-}
-.doodle-icon-left{
-    width: 70px;
-    height: 70px;
-    margin: 50px 10px 50px 350px;
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+    animation: float 3s ease-in-out infinite;
 }
 
+.doodle-icon-left {
+    position: absolute;
+    bottom: 10%;
+    left: 10%;
+    animation: float 1s ease-in-out infinite;
+}
+
+/* UFO Image */
+.ufo-icon {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    width: 150px;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Bird Image */
+.bird-icon {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 100px;
+    animation: float 2s ease-in-out infinite;
+}
+
+/* Title */
 .title {
-    font-family: 'Arial', sans-serif;
-    font-size: 32px;
+    font-size: 36px;
     color: #333;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Buttons */
 .buttons button {
     font-size: 18px;
-    padding: 10px 20px;
+    padding: 12px 24px;
     margin: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.buttons button:hover {
+    transform: scale(1.1);
 }
 
 .play-button {
@@ -89,59 +126,126 @@ body, html {
     color: white;
 }
 
+/* Rules Container */
 .rules-container {
     display: none;
-    position:absolute;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
     border: 2px solid #ddd;
     border-radius: 10px;
-    padding: 10px;
-    width: 30%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    z-index: 10;
 }
 
 .rules-container h2 {
-    margin-bottom: 10px;
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
 }
 
 .rules-container p {
-    margin: 5px 0;
+    font-size: 16px;
+    color: #555;
+    margin: 10px 0;
 }
 
 .rules-container button {
     background-color: #555;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 10px 20px;
     cursor: pointer;
-    margin-top: 10px;
     border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
+.rules-container button:hover {
+    background-color: #333;
+}
+
+/* Back Button */
 .back-button {
     position: absolute;
     top: 10px;
     left: 10px;
     padding: 10px 20px;
     background-color: #d37373;
-    color: rgb(0, 0, 0);
+    color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
+.back-button:hover {
+    background-color: #c64e4e;
+    transform: scale(1.05);
+}
 
+/* Animations */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(-10px);
+    }
+    50% {
+        transform: translateY(10px);
+    }
+}
 
+@keyframes fly {
+    0% {
+        transform: translateX(-50px) scaleX(1);
+    }
+    50% {
+        transform: translateX(50px) scaleX(1);
+    }
+    100% {
+        transform: translateX(100px) scaleX(-1);
+    }
+}
 
+/* Responsive Design */
+@media only screen and (max-width: 768px) {
+    .title {
+        font-size: 28px;
+    }
 
-@media only screen and (max-width: 650px)
-{
-    .home-screen {
-        display: flex;
-        position: absolute;
-        margin: auto;
+    .buttons button {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+
+    .doodle-icon,
+    .ufo-icon,
+    .bird-icon {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .title {
+        font-size: 24px;
+    }
+
+    .buttons button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .rules-container {
+        padding: 15px;
+        width: 85%;
+    }
+
+    .ufo-icon,
+    .bird-icon {
+        display: none; /* Hide less important elements on smaller screens */
     }
 }
